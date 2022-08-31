@@ -22,33 +22,32 @@ class MemberRepositoryV0Test {
     String memeberId = "memberV2";
 
     @Test
-    @Order(1)
-    void save() throws SQLException {
+    void order1_save() throws SQLException {
         Member memberV0 = new Member(memeberId, 10000);
         repositoryV0.save(memberV0);
-
+        assertThat(memberV0).isNotNull();
+        log.info("[save]");
     }
 
     @Test
-    @Order(2)
-    void findById() throws SQLException {
+    void order2_findById() throws SQLException {
         Member member = repositoryV0.findById(memeberId);
 
         log.info("[Test] member(memberId = {}, money = {})", member.getMemberId(), member.getMoney());
         assertThat(member).isNotNull();
+        log.info("[find]");
     }
 
     @Test
-    @Order(3)
-    void update() throws SQLException {
+    void order3_update() throws SQLException {
         repositoryV0.update(memeberId, 20000);
         Member updatedMember = repositoryV0.findById(memeberId);
         assertThat(updatedMember.getMoney()).isEqualTo(20000);
+        log.info("[update]");
     }
 
     @Test
-    @Order(4)
-    void remove() throws SQLException {
+    void order4_remove() throws SQLException {
         repositoryV0.remove(memeberId);
         log.info("[delete success]");
     }
