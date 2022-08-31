@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,6 +21,21 @@ public class ConnectionTest {
     void driverManager() throws SQLException {
         Connection connection1 = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         Connection connection2 = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+
+        log.info("connection1={}, class={}",connection1, connection1.getClass());
+        log.info("connection2={}, class={}",connection2, connection2.getClass());
+    }
+
+    @Test
+    void dataSourceDriverManager() throws SQLException {
+        DataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
+
+        useDataSource(dataSource);
+    }
+
+    private void useDataSource(DataSource dataSource) throws SQLException {
+        Connection connection1 = dataSource.getConnection();
+        Connection connection2 = dataSource.getConnection();
 
         log.info("connection1={}, class={}",connection1, connection1.getClass());
         log.info("connection2={}, class={}",connection2, connection2.getClass());
