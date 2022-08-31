@@ -1,11 +1,12 @@
 package com.jdbc.repository;
 
-import com.jdbc.connect.DBConnectionUtil;
 import com.jdbc.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.util.NoSuchElementException;
+
+import static com.jdbc.connect.DBHelper.*;
 
 @Slf4j
 public class MemberRepositoryV0 {
@@ -50,7 +51,6 @@ public class MemberRepositoryV0 {
                 member.setMoney(rs.getInt("money"));
                 return member;
             }
-
             throw new NoSuchElementException("member not found memberId = " + memberId);
         } catch (SQLException e) {
             log.info("db error", e);
@@ -60,37 +60,22 @@ public class MemberRepositoryV0 {
         }
     }
 
+    public void remove(String memberId) throws SQLException {
+        String sql = "delete from member where member_id = ?";
 
-    private void close(Connection con, Statement stmt, ResultSet rs){
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                log.info("error ", e);
-                e.printStackTrace();
-            }
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, memberId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            close(con, pstmt, null);
         }
-
-        if (stmt != null) {
-            try {
-                stmt.close();
-            } catch (SQLException e) {
-                log.info("error ", e);
-                e.printStackTrace();
-            }
-        }
-
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException e) {
-                log.info("error ", e);
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private Connection getConnection() {
-        return DBConnectionUtil.getConnection();
     }
 }

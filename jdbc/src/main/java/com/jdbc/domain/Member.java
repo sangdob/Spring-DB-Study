@@ -1,7 +1,6 @@
 package com.jdbc.domain;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
 public class Member {
