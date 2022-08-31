@@ -15,6 +15,4 @@ public class Member {
         this.memberId = memberId;
         this.money = money;
     }
-
-
 }
