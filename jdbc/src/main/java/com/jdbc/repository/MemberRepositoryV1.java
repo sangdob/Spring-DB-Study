@@ -3,6 +3,7 @@ package com.jdbc.repository;
 import com.jdbc.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +14,13 @@ import static com.jdbc.connect.DBHelper.close;
 import static com.jdbc.connect.DBHelper.getConnection;
 
 @Slf4j
+
 public class MemberRepositoryV1 {
+    DataSource dataSource;
+
+    public MemberRepositoryV1(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public Member save(Member member) throws SQLException {
         String sql = "insert into member(member_id, money) values (?,?)";
@@ -86,7 +93,7 @@ public class MemberRepositoryV1 {
         }
     }
 
-    public void remove(String memberId) throws SQLException {
+    public void delete(String memberId) throws SQLException {
         String sql = "delete from member where member_id = ?";
 
         Connection con = null;

@@ -3,6 +3,7 @@ package com.jdbc.connect;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.support.JdbcUtils;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,4 +52,9 @@ public class DBHelper {
         return DBConnectionUtil.getConnection();
     }
 
+    public static Connection getConnection(DataSource dataSource) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        log.info("get Connection = {} , class = {} ", connection,connection.getClass());
+        return connection;
+    }
 }
