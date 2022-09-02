@@ -1,6 +1,7 @@
 package com.jdbc.connect;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.support.JdbcUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,7 +11,15 @@ import java.sql.Statement;
 @Slf4j
 public class DBHelper {
     public static void close(Connection con, Statement stmt, ResultSet rs) {
-        if (rs != null) {
+
+        /**
+         * JdbcUtils 활용 close
+         * */
+        JdbcUtils.closeResultSet(rs);
+        JdbcUtils.closeStatement(stmt);
+        JdbcUtils.closeConnection(con);
+
+      /*  if (rs != null) {
             try {
                 rs.close();
             } catch (SQLException e) {
@@ -35,7 +44,7 @@ public class DBHelper {
                 log.info("[connection error] ", e);
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     public static Connection getConnection() {
