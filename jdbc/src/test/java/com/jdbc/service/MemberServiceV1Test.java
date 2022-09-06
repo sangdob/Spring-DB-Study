@@ -40,6 +40,13 @@ class MemberServiceV1Test {
         serviceV1 = new MemberServiceV1(repositoryV1);
     }
 
+    @AfterEach
+    void after() throws SQLException {
+        repositoryV1.delete(MEMBER_A);
+        repositoryV1.delete(MEMBER_B);
+        repositoryV1.delete(MEMBER_EX);
+    }
+
     @Test
     @DisplayName("정상 이체 상황")
     void accountTransfer() throws SQLException {
@@ -62,9 +69,30 @@ class MemberServiceV1Test {
         assertThat(findMemberB.getMoney()).isEqualTo(16000);
     }
 
-    @AfterEach
-    void after() throws SQLException {
-        repositoryV1.delete(MEMBER_A);
-        repositoryV1.delete(MEMBER_B);
+    @Test
+    @DisplayName("이체 예외 상황")
+    void accountTransferEx() throws SQLException {
+        //given
+        Member memberA = new Member(MEMBER_A, 10000);
+        Member memberEx = new Member(MEMBER_EX, 10000);
+        repositoryV1.save(memberA);
+        repositoryV1.save(memberEx);
+
+        //when
+        assertThatThrownBy(() -> {
+            serviceV1.accountTransfer(memberA.getMemberId(),
+                memberEx.getMemberId(),
+                20000);}).isInstanceOf(IllegalStateException.class);
+//        serviceV1.accountTransfer(memberA.getMemberId(), memberEx.getMemberId(), 6000);
+
+        //then
+   /*     Member findMemberA = repositoryV1.findById(memberA.getMemberId());
+        Member findMemberB = repositoryV1.findById(memberEx.getMemberId());
+        log.info("find member A  = {} ", findMemberA.toString());
+        log.info("find member A  = {} ", findMemberB.toString());
+
+        assertThat(findMemberA.getMoney()).isEqualTo(4000);
+        assertThat(findMemberB.getMoney()).isEqualTo(16000);*/
     }
+
 }
