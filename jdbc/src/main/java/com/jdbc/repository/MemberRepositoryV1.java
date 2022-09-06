@@ -14,7 +14,6 @@ import static com.jdbc.connect.DBHelper.close;
 import static com.jdbc.connect.DBHelper.getConnection;
 
 @Slf4j
-
 public class MemberRepositoryV1 {
     DataSource dataSource;
 
