@@ -15,4 +15,9 @@ public class Member {
         this.memberId = memberId;
         this.money = money;
     }
+
+    @Override
+    public String toString(){
+        return "memberId: " + this.memberId + ", money : " + this.money;
+    }
 }
