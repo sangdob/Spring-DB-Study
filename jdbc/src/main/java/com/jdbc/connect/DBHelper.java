@@ -11,6 +11,11 @@ import java.sql.Statement;
 
 @Slf4j
 public class DBHelper {
+    public static void close(Statement stmt, ResultSet rs) {
+        JdbcUtils.closeStatement(stmt);
+        JdbcUtils.closeResultSet(rs);
+    }
+
     public static void close(Connection con, Statement stmt, ResultSet rs) {
 
         /**
