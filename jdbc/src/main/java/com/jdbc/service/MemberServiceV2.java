@@ -1,10 +1,7 @@
 package com.jdbc.service;
 
-import com.jdbc.connect.ConnectionConst;
-import com.jdbc.connect.DBConnectionUtil;
-import com.jdbc.connect.DBHelper;
 import com.jdbc.domain.Member;
-import com.jdbc.repository.MemberRepositoryV1;
+import com.jdbc.repository.MemberRepositoryV2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +15,7 @@ import java.sql.SQLException;
 public class MemberServiceV2 {
 
     private final DataSource dataSource;
-    private final MemberRepositoryV1 memberRepositoryV1;
+    private final MemberRepositoryV2 memberRepositoryV2;
 
     public void accountTransfer(String fromId, String toId, int money) throws SQLException {
         Connection con = dataSource.getConnection();
@@ -26,7 +23,7 @@ public class MemberServiceV2 {
         try {
             con.setAutoCommit(false); // 트랜잭션 시작
             //비즈니스 로직
-            bizLogic(fromId, toId, money);
+            bizLogic(con, fromId, toId, money);
             con.commit();
         } catch (Exception e) {
             con.rollback();
@@ -36,13 +33,13 @@ public class MemberServiceV2 {
         }
     }
 
-    private void bizLogic(String fromId, String toId, int money) throws SQLException {
-        Member fromMember = memberRepositoryV1.findById(fromId);
-        Member toMember = memberRepositoryV1.findById(toId);
+    private void bizLogic(Connection con, String fromId, String toId, int money) throws SQLException {
+        Member fromMember = memberRepositoryV2.findById(con, fromId);
+        Member toMember = memberRepositoryV2.findById(con, toId);
 
-        memberRepositoryV1.update(fromId, fromMember.getMoney() - money);
+        memberRepositoryV2.update(fromId, fromMember.getMoney() - money);
         validation(toMember);
-        memberRepositoryV1.update(toId, toMember.getMoney() + money);
+        memberRepositoryV2.update(toId, toMember.getMoney() + money);
     }
 
     private void release(Connection con) {
