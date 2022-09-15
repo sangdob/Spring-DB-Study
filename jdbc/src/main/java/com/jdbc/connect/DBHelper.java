@@ -1,6 +1,7 @@
 package com.jdbc.connect;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
 
 import javax.sql.DataSource;
@@ -51,6 +52,12 @@ public class DBHelper {
                 e.printStackTrace();
             }
         }*/
+    }
+
+    public static void close(Connection con, Statement stmt, ResultSet rs, DataSource dataSource) {
+        JdbcUtils.closeResultSet(rs);
+        JdbcUtils.closeStatement(stmt);
+        DataSourceUtils.releaseConnection(con, dataSource);
     }
 
     public static Connection getConnection() {

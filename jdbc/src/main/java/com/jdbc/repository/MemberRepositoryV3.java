@@ -1,5 +1,6 @@
 package com.jdbc.repository;
 
+import com.jdbc.connect.DBHelper;
 import com.jdbc.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -12,7 +13,7 @@ import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
 import static com.jdbc.connect.DBHelper.close;
-import static com.jdbc.connect.DBHelper.getConnection;
+
 
 /**
  * 트랜잭션 - 트랜잭션 매니저
@@ -43,7 +44,7 @@ public class MemberRepositoryV3 {
             e.printStackTrace();
             throw e;
         } finally {
-            close(con, pstmt, null);
+            close(con, pstmt, null, dataSource);
         }
     }
 
@@ -71,7 +72,7 @@ public class MemberRepositoryV3 {
             log.info("db error", e);
             throw e;
         } finally {
-            close(con, pstmt, null);
+            close(con, pstmt, null, dataSource);
         }
     }
 
@@ -104,7 +105,7 @@ public class MemberRepositoryV3 {
             log.info("db error", e);
             throw e;
         } finally {
-            close(con, pstmt, null);
+            close(con, pstmt, null, dataSource);
         }
     }
 
@@ -126,7 +127,7 @@ public class MemberRepositoryV3 {
             log.info("db Error", e);
             throw e;
         } finally {
-            close(pstmt, null);
+            close(con, pstmt, null, dataSource);
         }
     }
 
@@ -145,7 +146,7 @@ public class MemberRepositoryV3 {
             e.printStackTrace();
             throw e;
         } finally {
-            close(con, pstmt, null);
+            close(con, pstmt, null, dataSource);
         }
     }
 
