@@ -8,11 +8,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 import static com.jdbc.connect.ConnectionConst.*;
@@ -24,28 +28,60 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 @Slf4j
 @SpringBootTest
-class MemberServiceV3_2Test {
+class MemberServiceV3_3Test {
 
     public static final String MEMBER_A = "accountTestA";
     public static final String MEMBER_B = "accountTestB";
     public static final String MEMBER_EX = "ex";
 
+    @Autowired
     private MemberRepositoryV3 repositoryV3;
-    private MemberServiceV3_2 serviceV3;
 
-    @BeforeEach
-    void before() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
-        PlatformTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
-        repositoryV3 = new MemberRepositoryV3(dataSource);
-        serviceV3 = new MemberServiceV3_2(transactionManager, repositoryV3);
+    @Autowired
+    private MemberServiceV3_3 serviceV3;
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        DataSource getDataSource() {
+            return new DriverManagerDataSource(URL, USERNAME, PASSWORD);
+        }
+
+        @Bean
+        PlatformTransactionManager transactionManager() {
+            return new DataSourceTransactionManager(getDataSource());
+        }
+
+        @Bean
+        MemberServiceV3_3 memberServiceV3() {
+            return new MemberServiceV3_3(memberRepositoryV3());
+        }
+
+        @Bean
+        MemberRepositoryV3 memberRepositoryV3(){
+            return new MemberRepositoryV3(getDataSource());
+        }
+
     }
+
+//    @BeforeEach
+//    void before() {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
+//        repositoryV3 = new MemberRepositoryV3(dataSource);
+//        serviceV3 = new MemberServiceV3_3(repositoryV3);
+//    }
 
     @AfterEach
     void after() throws SQLException {
         repositoryV3.delete(MEMBER_A);
         repositoryV3.delete(MEMBER_B);
         repositoryV3.delete(MEMBER_EX);
+    }
+
+    @Test
+    void AopCheck() {
+        log.info("service = {}", serviceV3.getClass());
+        log.info("repository = {}", repositoryV3.getClass());
     }
 
     @Test
