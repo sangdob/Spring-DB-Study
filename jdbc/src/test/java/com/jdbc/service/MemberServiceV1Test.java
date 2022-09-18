@@ -1,10 +1,8 @@
 package com.jdbc.service;
 
-import com.jdbc.connect.ConnectionConst;
 import com.jdbc.domain.Member;
 import com.jdbc.repository.MemberRepositoryV1;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +14,6 @@ import java.sql.SQLException;
 
 import static com.jdbc.connect.ConnectionConst.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * 기본 동작, 트랜잭션 없는 문제 발생 테스트

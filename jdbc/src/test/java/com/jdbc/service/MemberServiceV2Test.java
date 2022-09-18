@@ -3,7 +3,6 @@ package com.jdbc.service;
 
 import com.jdbc.domain.Member;
 import com.jdbc.repository.MemberRepositoryV2;
-import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
