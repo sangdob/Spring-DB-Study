@@ -61,6 +61,17 @@ public class UnCheckedAppTest {
         }
     }
 
+    @Test
+    void printEx() {
+        Controller controller = new Controller();
+
+        try {
+            controller.request();
+        } catch (Exception e) {
+            log.info("ex", e);
+        }
+    }
+
     static class RuntimeConnectException extends RuntimeException {
         public RuntimeConnectException(String message) {
             super(message);
