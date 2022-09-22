@@ -98,7 +98,6 @@ public class ExTranslatorV1Test {
             }finally {
                 close(connection, pstmt, null);
             }
-
         }
 
         @Override
