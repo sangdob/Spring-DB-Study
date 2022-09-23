@@ -45,6 +45,9 @@ public class SpringExceptionTranslatorTest {
         }
     }
 
+    /**
+     * 스프링에서 제공하는 SQL 예외 변환기
+     */
     @Test
     void exceptionTranslator() {
         String sql = "select bad grammer";
